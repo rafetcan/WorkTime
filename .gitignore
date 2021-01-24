@@ -1,6 +1,7 @@
 # Logs
 release-builds/
 .github/
+log/
 logs
 *.log
 npm-debug.log*
