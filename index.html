@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
+  <title>WorkTime</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css"
+    integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+    integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #2c3e50;
+      font-family: 'Itim';
+      color: white;
+    }
+    .card {
+      background-color: #33475c;
+    }
+    #content{
+      display:flex;
+      background: #3b8c46; 
+      align-items: center;
+      flex-direction: column;
+    }
+    #header{
+      position: relative;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-start;
+      background: #2D2F31;
+      align-self: stretch;
+      -webkit-app-region: drag;
+    }
+    .option{
+      color: white;
+      padding: 10px 15px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      -webkit-app-region: no-drag;
+    }
+    .option:hover{
+      background: #c0392b; 
+    }
+    #title{
+      position: absolute;
+      color:white;
+      font-size: 20px;
+      left: 5px;
+      top: 3px;
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <!--  PENCE BAŞLIĞI -->
+  <div id="content">
+		<div id="header">
+			<div id="title">WorkTime&nbsp;</div>
+					<div class="option" id="closed"><i class="fas fa-times"></i></div>
+					<div class="option" id="maximize"><i class="far fa-window-maximize"></i></div>
+					<div class="option" id="minimize"><i class="fas fa-window-minimize"></i></div>
+		</div>
+	</div>
+  <!--  PENCE BAŞLIĞI END -->
+
+
+
+
+  <div class="container-fluid pt-4">
+    <h1 class="text-center" style="color: #c0392b;">WorkTime 
+    </h1>
+    <!-- Menü -->
+    <div class="card p-4">
+      <div class="card-body text-center">
+        <h3>Çalışmaya Başla</h3>
+        <button class="btn btn-primary" id="durumBtn">Geçmiş</button>
+        <button class="btn btn-success" id="bsltBtn">Başlat</button>
+        <button class="btn btn-danger" id="durdurBtn">Durdur</button>
+      </div>
+    </div>
+    <!-- Menü End -->
+
+    <!-- Timer Start -->
+    <div id="timerID" class="card p-4">
+      <div class="card-body">
+            <h2 class="text-center" id="myTimer"></h2>
+      </div>
+    </div>
+    <!-- Timer End -->
+
+
+    <div class="card" style="display: none;">
+      <div class="card-body">
+        <div id="icerik">
+        </div>
+      </div>
+    </div>
+
+  </div>
+    <!-- CONTAİNER ENDS<3 -->
+
+  
+  
+  <footer id="footer" style="position: fixed; bottom: 0; width: 100%; background-color: #c0392b;" class="text-primary text-center text-white">
+    www.rafethokka.com
+  </footer>
+  <div style="position: fixed; right:10px;bottom: 2px; font-size: 12px; font-weight: bold;" class="text-secondary">Beta</div>
+
+
+
+  <script src="./renderer.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.bundle.min.js"
+    integrity="sha384-BOsAfwzjNJHrJ8cZidOg56tcQWfp6y72vEJ8xQ9w6Quywb24iOsW913URv1IS4GD" crossorigin="anonymous"></script>
+</body>
+</html>
