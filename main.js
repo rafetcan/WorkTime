@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, ipcRenderer, dialog, Notification } = requi
 const path = require('path')
 const fs = require('fs');
 const dateFormat = require('dateformat');
+const { join } = require('path');
 const log = "log//";
 const date = dateFormat(new Date(), "dd-mm-yyyy"); // Tarih
 const time = dateFormat(new Date(), "h:MM:ss TT") // Saat
@@ -73,7 +74,7 @@ function createWindow() {
   })
   // mainWindow.webContents.openDevTools(); // Developer Zamazingosu
 
-  mainWindow.loadFile('index.html')
+  mainWindow.loadFile(path.join(__dirname,'src//index.html'))
   // Dosya Kontrolümüz Yapalım.
 
   function myTimer() {

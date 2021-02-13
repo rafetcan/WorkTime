@@ -1,6 +1,6 @@
 {
   "name": "worktime",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "work time - çalışma zamanı",
   "main": "main.js",
   "scripts": {

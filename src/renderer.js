@@ -6,7 +6,7 @@ let $ = require('jquery');
 
 var myTimer, i = 0, veriGndrTimer = 0, sonuc, _dev = false;
 var versionTimer = 0,timerController = false;
-var version = "0.1.16";
+var version = "0.1.17";
 
 setInterval(() => {
     if (versionTimer == 0){
