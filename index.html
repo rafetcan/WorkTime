@@ -52,6 +52,26 @@
       left: 5px;
       top: 3px;
     }
+    #version{
+      position: fixed; 
+      right:10px;
+      bottom: 2px; 
+      font-size: 12px; 
+      font-weight: bold;
+    }
+    #devBtn{
+      position: fixed; 
+      left:10px;
+      bottom: 2px; 
+      font-size: 12px; 
+      font-weight: bold;
+    }
+    .black:hover{
+      color:  #2D2F31;
+    }
+    #myTimer{
+      font-size: 24px;
+    }
   </style>
 </head>
 
@@ -72,14 +92,14 @@
 
 
 
-  <div class="container-fluid pt-4">
-    <h1 class="text-center" style="color: #c0392b;">WorkTime 
-    </h1>
+  <div class="container-fluid mt-4 mb-4">
+    <h1 id="baslik" class="text-center" style="color: #c0392b;">WorkTime</h1>
+    
     <!-- Menü -->
-    <div class="card p-4">
-      <div class="card-body text-center">
+    <div class="card p-3" id="menu">
+      <div class="card-body text-center" >
         <h3>Çalışmaya Başla</h3>
-        <button class="btn btn-primary" id="durumBtn">Geçmiş</button>
+        <button class="btn btn-secondary" id="durumBtn">Geçmiş</button>
         <button class="btn btn-success" id="bsltBtn">Başlat</button>
         <button class="btn btn-danger" id="durdurBtn">Durdur</button>
       </div>
@@ -94,13 +114,34 @@
     </div>
     <!-- Timer End -->
 
+    
 
-    <div class="card" style="display: none;">
+    <!-- Ayarlar -->
+    <div class="card" id="dev">
       <div class="card-body">
-        <div id="icerik">
+        <div id="icerik" class="text-center">
+          <button class="btn btn-danger m-1" id="sifirla">Sıfırla</button><hr>
+          <button class="btn btn-secondary m-1" id="arti10">+10 Dk</button>
+          <button class="btn btn-secondary m-1" id="arti30">+30 Dk</button>
+          <button class="btn btn-secondary m-1" id="arti60">+60 Dk</button><hr>
+          <button class="btn btn-secondary m-1" id="eksi10">-10 Dk</button>
+          <button class="btn btn-secondary m-1" id="eksi30">-30 Dk</button>
+          <button class="btn btn-secondary m-1" id="eksi60">-60 Dk</button>
         </div>
       </div>
     </div>
+    <!-- Ayarlar Sonu Gülüm Demem Gülün Tikeni çok olur-->
+
+
+
+    <div class="hata pt-3" id="hataAlani">
+      <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+        <strong>Hata!</strong> <span class="hataMesaji"></span>
+        <button type="button" class="btn-close alert-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+
+
 
   </div>
     <!-- CONTAİNER ENDS<3 -->
@@ -108,9 +149,10 @@
   
   
   <footer id="footer" style="position: fixed; bottom: 0; width: 100%; background-color: #c0392b;" class="text-primary text-center text-white">
-    www.rafethokka.com
+    <span class="black" >www.rafethokka.com<span>
   </footer>
-  <div style="position: fixed; right:10px;bottom: 2px; font-size: 12px; font-weight: bold;" class="text-secondary">Beta</div>
+  <div id="version" class="black">Beta</div>
+  <div id="devBtn" class="black"><i class="fas fa-cog"></i></div>
 
 
 

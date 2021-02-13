@@ -4,11 +4,65 @@ var win = electron.remote.getCurrentWindow();
 const shell = require('electron').shell;
 let $ = require('jquery');
 
-var myTimer, i = 0, veriGndrTimer = 0, sonuc;
+var myTimer, i = 0, veriGndrTimer = 0, sonuc, _dev = false;
+var versionTimer = 0,timerController = false;
+var version = "0.1.16";
+
+setInterval(() => {
+    if (versionTimer == 0){
+        versionTimer = 1;
+        $('#version').html("Beta");
+    }
+    else{
+        versionTimer = 0;
+        $('#version').html(version);
+    }
+}, 2000);
 
 $('#durdurBtn').hide();
 $('#timerID').hide();
-$('#durumBtn').hide();
+$('#hataAlani').hide();
+
+
+    // Ayarlar 
+        
+    $('#sifirla').click(()=>{
+        $("#durdur").trigger("click");
+        ipcRenderer.send('sifirla');
+    })
+
+
+    $('#arti10').click(()=>{
+        $("#durdur").trigger("click");
+        ipcRenderer.send('artı10');
+    })
+
+    $('#arti30').click(()=>{
+        $("#durdur").trigger("click");
+        ipcRenderer.send('artı30');
+    })
+
+    $('#arti60').click(()=>{
+        $("#durdur").trigger("click");
+        ipcRenderer.send('artı60');
+    })
+
+    $('#eksi10').click(()=>{
+        $("#durdur").trigger("click");
+        ipcRenderer.send('eksi10');
+    })
+
+    $('#eksi30').click(()=>{
+        $("#durdur").trigger("click");
+        ipcRenderer.send('eksi30');
+    })
+
+    $('#eksi60').click(()=>{
+        $("#durdur").trigger("click");
+        ipcRenderer.send('eksi60');
+    })
+
+    // Ayarlar End
 
 
 
@@ -23,6 +77,7 @@ ipcRenderer.on('myWork', (e, myWork) => {
 })
 
 $('#bsltBtn').click(() => {
+    timerController = true;
     $('#timerID').show();
     $('#bsltBtn').hide();
     $('#durdurBtn').show();
@@ -31,9 +86,11 @@ $('#bsltBtn').click(() => {
 
 
 $('#durumBtn').click(() => {
-    alert('Beta');
+    $('.hataMesaji').html('Bu kısım henüz eklenmedi.');
+    $('#hataAlani').show();
     // ipcRenderer.send('durum:sorgu'); // durum sorgula dedik
 })
+
 
 ipcRenderer.on('durum:sonuc', (e, durumSonuc) => {
     console.log(durumSonuc);
@@ -47,7 +104,10 @@ ipcRenderer.on("test:msj", (e, todoItem) => {
 })
 
 
+
+
 $('#durdurBtn').click(() => {
+    timerController = false;
     $('#bsltBtn').show();
     $('#durdurBtn').hide();
     $('#timerID').hide();
@@ -55,17 +115,39 @@ $('#durdurBtn').click(() => {
     console.log('Zamanlama Durduruldu.')
 })
 
+$('#dev').hide();
 
-
-
-
-$('footer').click(()=>{
-    shell.openExternal("http://www.rafethokka.com")
-});
-
-$('#minimize').click(() => {
-    win.minimize();
+$('#devBtn').click(() => {
+    if(timerController == true){
+        if(_dev == true){
+            _dev = false;
+            $('#baslik').html('WorkTime')
+            $('#menu').show();
+            $('#dev').hide();
+        }
+        else{
+            _dev = true;
+            $('#baslik').html('Ayarlar')
+            $('#menu').hide();
+            $('#dev').show();
+        } 
+    }
+    else{
+        $('.hataMesaji').html('Önce Çalışmaya Başlamalısın.');
+        $('#hataAlani').show();
+        // alert('Önce Timeri Başlatmalısın')
+    }
 })
+
+
+
+
+
+$('.alert-close').click(()=>{$('#hataAlani').hide()})
+
+$('#footerLink').click(()=>{shell.openExternal("http://www.rafethokka.com")});
+
+$('#minimize').click(() => {win.minimize();})
 
 $('#maximize').click(() => {
     if (win.isMaximized()) {
@@ -78,8 +160,12 @@ $('#maximize').click(() => {
 
 
 $('#closed').click(() => {
-    // Timer Hatası
-    $("#durdur").trigger("click");
+    // Timer Hatası #Fixed2
+    $('#bsltBtn').show();
+    $('#durdurBtn').hide();
+    $('#timerID').hide();
+    ipcRenderer.send('myWork:durdur');
+    console.log('Zamanlama Durduruldu.')
     setTimeout(function() {
         win.close();
     }, 500);

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, ipcRenderer } = require('electron')
+const { app, BrowserWindow, ipcMain, ipcRenderer, dialog, Notification } = require('electron')
 const path = require('path')
 const fs = require('fs');
 const dateFormat = require('dateformat');
@@ -8,7 +8,7 @@ const time = dateFormat(new Date(), "h:MM:ss TT") // Saat
 var liste = [];
 var i = 0;
 var bugununDosyası;
-var myTimer;
+var myTimerVar, myTimer,timerController = false;
 
 
 try {
@@ -54,10 +54,13 @@ function dosyalariListele() {
   })
 }
 
+
+
+
 function createWindow() {
   const mainWindow = new BrowserWindow({
     title: 'WorkTime',
-    width: 400,
+    width: 425,
     height: 500,
     center: true,
     icon: path.join(__dirname, 'assets/favicon.png'),
@@ -73,30 +76,119 @@ function createWindow() {
   mainWindow.loadFile('index.html')
   // Dosya Kontrolümüz Yapalım.
 
+  function myTimer() {
+    bugununDosyası++;
+    i++;
+    mainWindow.webContents.send('myWork', bugununDosyası);
+    console.log(bugununDosyası);
+    if (i == 5) {
+      // Veriyi YazdırDiyeceğiz
+      fs.writeFileSync(log + date, bugununDosyası);
+      i = 0;
+    }
+    if (bugununDosyası >= 86400){
+      hataTimer();
+    }
+  }
+
+  function hataTimer() {
+    clearInterval(myTimerVar);
+    const options = {
+      type: 'error',
+      defaultId: 2,
+      title: 'Hata',
+      message: 'Kafam Karıştı bir günde 24 saat yokmuydu??????',
+      detail: 'Uygulamayı bi kapatıp açalım bakalım. 5 sn sonra kapatıyorum sen tekrar açarsın',
+    };
+  
+    dialog.showMessageBox(null, options, (response, checkboxChecked) => {
+      console.log(response);
+      console.log(checkboxChecked);
+    });
+    fs.writeFileSync(log+date,0);
+    // alert('Kafam Karıştı bir günde 24 saat yokmuydu??????')
+    // alert('Uygulamayı bi kapatıp açalım bakalım. 5 sn sonra kapatıyorum sen tekrar açarsın');
+    setTimeout(() => {
+      app.quit();
+      app.relaunch();
+    }, 500);
+  }
+
+
   ipcMain.on('bslt', () => {
-    myTimer = setInterval(() => {
-      bugununDosyası++;
-      i++;
-      mainWindow.webContents.send('myWork', bugununDosyası);
-      console.log(bugununDosyası);
-      if (i == 5) {
-        // Veriyi YazdırDiyeceğiz
-        fs.writeFileSync(log + date, bugununDosyası);
-        i = 0;
-      }
-    }, 1000);
+    if(timerController == false){
+      timerController = true;
+      myTimerVar = setInterval(myTimer,1000);
+    }
   })
 
   ipcMain.on('myWork:durdur', (e) => {
-    clearInterval(myTimer);
-    console.log('Zamanlama Durduruldu.')
+    if(timerController == true){
+      timerController = false;
+      clearInterval(myTimerVar);
+      console.log('Zamanlama Durduruldu.')
+    }
   })
-
 
   ipcMain.on("durum:sorgu", (err, data) => {
     console.log('Durum Sorgulanması Gönderiliyor!\n' + data);
     mainWindow.webContents.send("durum:sonuc", liste + "<br>");
   })
+
+
+  // Ayarlar Başlangıç
+  function zamanEkle(dk) {
+    clearInterval(myTimerVar);
+    if(dk == 0){
+      bugununDosyası = 0;
+      console.log('Süre Sıfırlandı ve Timer Başlatıldı...!');
+    }
+    else{
+      bugununDosyası =  bugununDosyası + dk * 60;
+      console.log(dk+' Dakika Eklendi ve Timer Başlatıldı...!');
+    }
+    if(bugununDosyası < 0){
+      bugununDosyası = 0;
+      console.log('Zaman - Olamaz!')
+    }
+    setTimeout(() => {
+      fs.writeFileSync(log+date,bugununDosyası);
+    }, 100);
+    myTimerVar = setInterval(myTimer,1000);
+  }
+
+  ipcMain.on("sifirla",()=>{
+    zamanEkle(0);
+  })
+
+  ipcMain.on("artı10",()=>{
+    zamanEkle(10);
+  })
+
+  ipcMain.on("artı30",()=>{
+    zamanEkle(30);
+  })
+
+  ipcMain.on("artı60",()=>{
+    zamanEkle(60);
+  })
+
+
+  ipcMain.on("eksi10",()=>{
+    zamanEkle(-10);
+  })
+
+  ipcMain.on("eksi30",()=>{
+    zamanEkle(-30);
+  })
+
+  ipcMain.on("eksi60",()=>{
+    zamanEkle(-60);
+  })
+
+  // Ayalar Bitişo gülo
+
+
 
 
 
@@ -108,14 +200,12 @@ function createWindow() {
     console.log(bugununDosyası);
   })
 
-
-
-
   ipcMain.on("key", (err, data) => {
     console.log(data);
     mainWindow.webContents.send("test:msj", data)
   })
 }
+
 
 
 
@@ -129,6 +219,3 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
-
-
-
